@@ -33,7 +33,8 @@ app.post("/todo",async(req,res)=>{
   await todo.create({
     title:createPayload.title,
     description:createPayload.description,
-   completed:false
+    completed:false,
+    id:createPayload.id
   })
   res.json({
     msg:"title and description has been saved !   :)"
@@ -54,23 +55,16 @@ app.get("/todos",async(req,res)=>{
 
 
 app.put("/completed",async (req,res)=>{
-  const createPayload=req.body;
-  const parsePayload =createTodo.safeParse(createPayload);
-
-  if(!parsePayload.success){
-    res.status(411).json({
-      msg: "you have sent the wrong message: "
-    })
-    return ;
-  }
-  await todo.update({
-  _id:req.body.id
+  const ids =req.body.id
+  console.log("the id is :"+ids);
+  await todo.updateOne({
+  _id:ids
 },
 {
   completed:true
-}
 
-)
+})
+res.json({})
     
 })
 app.listen(port,()=>{console.log(`server is running at port ${port}`)})
